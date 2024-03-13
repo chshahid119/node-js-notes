@@ -2,6 +2,8 @@ const fs = require("fs");
 const http = require("http");
 const url = require("url");
 
+const slugify = require("slugify");
+
 const replaceTemplate = require("./modules/replaceTemplate");
 
 /////////////////////////////////////////////
@@ -37,7 +39,7 @@ const replaceTemplate = require("./modules/replaceTemplate");
 // console.log("will read this file first");
 
 /////////////////////////////////////////////
-// SERVER
+console.log(slugify("Fresh Avocados", { lower: true }));
 
 const tempOverview = fs.readFileSync(
   `${__dirname}/templates/template-overview.html`,
@@ -54,6 +56,10 @@ const tempProducts = fs.readFileSync(
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
 const productData = JSON.parse(data);
 
+const slugs = productData.map((el) => slugify(el.productName, { lower: true }));
+console.log(slugs);
+
+// SERVER
 const server = http.createServer((req, res) => {
   console.log(req.url);
   const { query, pathname } = url.parse(req.url, true);
